@@ -1,5 +1,6 @@
 ﻿const express = require('express')
 const app = express()
+const mongodb = require('mongodb');
 const MongoClient = require('mongodb').MongoClient
 const PORT = 9000
 require('dotenv').config()
@@ -12,7 +13,8 @@ MongoClient.connect(dbConnectionStr,{ useUnifiedTopology: true})
     .then(client => {
         console.log(`Connected to ${dbName} Database`)
         db = client.db(dbName)
-})
+    })
+    .catch(err => console.log(err))
 
 
 app.set('view engine', 'ejs')
@@ -21,10 +23,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 
-
+console.log('here')
 
 app.get('/', async (request, response) => {
-    
     const todoItems = await db.collection('todos').find().toArray()
     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
     response.render('index.ejs', { items: todoItems, left: itemsLeft })
@@ -41,7 +42,7 @@ app.get('/', async (request, response) => {
 
 
 app.post('/addTodo', (request,response) =>{
-    db.colelction('todos').insertOne({thing: request.body.todoItem, completed: false})
+    db.collection('todos').insertOne({thing: request.body.todoItem, completed: false})
     .then(result => {
         console.log('Todo Added')
         response.redirect('/')
