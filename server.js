@@ -1,20 +1,25 @@
 ﻿const express = require('express')
 const app = express()
-const mongodb = require('mongodb');
-const MongoClient = require('mongodb').MongoClient
-const PORT = 9000
-require('dotenv').config()
+const connectDB = require ('./config/database')
+const homeRoutes = require('./routes/home')
+const todoRoutes = require('/routes/todos')
+// const mongodb = require('mongodb');
+// const MongoClient = require('mongodb').MongoClient
+// const PORT = 9000
+require('dotenv').config({path: './config/.env'})
 
-let db, 
-    dbConnectionStr = process.env.DB_STRING,
-    dbName = 'todo'
+connectDB
+
+// let db,
+//     dbConnectionStr = process.env.DB_STRING,
+//     dbName = 'todo'
     
-MongoClient.connect(dbConnectionStr,{ useUnifiedTopology: true})
-    .then(client => {
-        console.log(`Connected to ${dbName} Database`)
-        db = client.db(dbName)
-    })
-    .catch(err => console.log(err))
+// MongoClient.connect(dbConnectionStr,{ useUnifiedTopology: true})
+//     .then(client => {
+//         console.log(`Connected to ${dbName} Database`)
+//         db = client.db(dbName)
+//     })
+//     .catch(err => console.log(err))
 
 
 app.set('view engine', 'ejs')
@@ -22,8 +27,8 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-
-console.log('here')
+app.use('/', homeRoutes)
+app.use('/todos', todoRoutes)
 
 app.get('/', async (request, response) => {
     const todoItems = await db.collection('todos').find().toArray()
@@ -96,6 +101,6 @@ app.delete('/deleteItem', (request, response) =>{
 
 
 
-app.listen(process.env.PORT || PORT, ()=> {
+app.listen(process.env.PORT, ()=> {
     console.log(`Server running on port ${PORT}`)
 })
