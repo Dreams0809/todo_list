@@ -2,13 +2,14 @@
 const app = express()
 const connectDB = require ('./config/database')
 const homeRoutes = require('./routes/home')
-const todoRoutes = require('/routes/todos')
+const todoRoutes = require('./routes/todos')
+const PORT = 8000
 // const mongodb = require('mongodb');
 // const MongoClient = require('mongodb').MongoClient
 // const PORT = 9000
 require('dotenv').config({path: './config/.env'})
 
-connectDB
+connectDB()
 
 // let db,
 //     dbConnectionStr = process.env.DB_STRING,
@@ -30,73 +31,73 @@ app.use(express.json())
 app.use('/', homeRoutes)
 app.use('/todos', todoRoutes)
 
-app.get('/', async (request, response) => {
-    const todoItems = await db.collection('todos').find().toArray()
-    const itemsLeft = await db.collection('todos').countDocuments({completed: false})
-    response.render('index.ejs', { items: todoItems, left: itemsLeft })
-//     db.collection('todo').find().toArray()
-//     .then(data =>{
-//         db.collection('todos').countDocuments({completed: false})
-//         .then(itemsLeft => {
-//             response.render('index.ejs', {items: data, left: itemsLeft})
-//         })
+// app.get('/', async (request, response) => {
+//     const todoItems = await db.collection('todos').find().toArray()
+//     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
+//     response.render('index.ejs', { items: todoItems, left: itemsLeft })
+// //     db.collection('todo').find().toArray()
+// //     .then(data =>{
+// //         db.collection('todos').countDocuments({completed: false})
+// //         .then(itemsLeft => {
+// //             response.render('index.ejs', {items: data, left: itemsLeft})
+// //         })
+// //     })
+// })
+// //     .catch(error => console.error(error))
+// // }))
+
+
+// app.post('/addTodo', (request,response) =>{
+//     db.collection('todos').insertOne({thing: request.body.todoItem, completed: false})
+//     .then(result => {
+//         console.log('Todo Added')
+//         response.redirect('/')
 //     })
-})
+// })
+
+
+// app.put('/markComplete', (request, response) => {
+//     db.collection('todos').updateOne({thing: request.body.itemFromJS},{
+//         $set: {
+//             completed: true
+//           }
+//     },{
+//         sort: {_id: -1},
+//         upsert: false
+//     })
+//     .then(result => {
+//         console.log('Marked Complete')
+//         response.json('Marked Complete')
+//     })
 //     .catch(error => console.error(error))
-// }))
 
+// })
 
-app.post('/addTodo', (request,response) =>{
-    db.collection('todos').insertOne({thing: request.body.todoItem, completed: false})
-    .then(result => {
-        console.log('Todo Added')
-        response.redirect('/')
-    })
-})
+// app.put('/markUnComplete', (request, response) => {
+//     db.collection('todos').updateOne({thing: request.body.itemFromJS},{
+//         $set: {
+//             completed: false
+//           }
+//     },{
+//         sort: {_id: -1},
+//         upsert: false
+//     })
+//     .then(result => {
+//         console.log('Marked Complete')
+//         response.json('Marked Complete')
+//     })
+//     .catch(error => console.error(error))
 
+// })
 
-app.put('/markComplete', (request, response) => {
-    db.collection('todos').updateOne({thing: request.body.itemFromJS},{
-        $set: {
-            completed: true
-          }
-    },{
-        sort: {_id: -1},
-        upsert: false
-    })
-    .then(result => {
-        console.log('Marked Complete')
-        response.json('Marked Complete')
-    })
-    .catch(error => console.error(error))
-
-})
-
-app.put('/markUnComplete', (request, response) => {
-    db.collection('todos').updateOne({thing: request.body.itemFromJS},{
-        $set: {
-            completed: false
-          }
-    },{
-        sort: {_id: -1},
-        upsert: false
-    })
-    .then(result => {
-        console.log('Marked Complete')
-        response.json('Marked Complete')
-    })
-    .catch(error => console.error(error))
-
-})
-
-app.delete('/deleteItem', (request, response) =>{
-    db.collection('todos').deleteOne({thing: request.body.itemsFromJS})
-    .then(result => {
-        console.log('Todo Deleted')
-        response.json('Todo Deleted')
-    })
-    .catch(error => console.error(error))
-})
+// app.delete('/deleteItem', (request, response) =>{
+//     db.collection('todos').deleteOne({thing: request.body.itemsFromJS})
+//     .then(result => {
+//         console.log('Todo Deleted')
+//         response.json('Todo Deleted')
+//     })
+//     .catch(error => console.error(error))
+// })
 
 
 
