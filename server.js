@@ -3,7 +3,6 @@ const app = express()
 const connectDB = require ('./config/database')
 const homeRoutes = require('./routes/home')
 const todoRoutes = require('./routes/todos')
-const PORT = 8000
 // const mongodb = require('mongodb');
 // const MongoClient = require('mongodb').MongoClient
 // const PORT = 9000
