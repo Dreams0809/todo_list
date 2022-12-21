@@ -1,5 +1,4 @@
-﻿
-const mongoose = require('mongoose')
+﻿const mongoose = require('mongoose')
 
 const TodoSchema = new mongoose.Schema({
   todo: {
@@ -9,6 +8,10 @@ const TodoSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     required: true,
+  },
+  userId: {
+    type: String,
+    required: true
   }
 })
 
